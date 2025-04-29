@@ -29,7 +29,7 @@ import {
   SidebarSeparator,
 } from "./ui/sidebar";
 import Link from "next/link";
-import Image from "next/image";
+//import Image from "next/image";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -49,13 +49,13 @@ const items = [
     icon: Home,
   },
   {
-    title: "Inbox",
+    title: "users",
     url: "/users",
     icon: Inbox,
   },
   {
-    title: "Calendar",
-    url: "#",
+    title: "payments",
+    url: "/payments",
     icon: Calendar,
   },
   {
