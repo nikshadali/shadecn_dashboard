@@ -2,7 +2,7 @@
 
 import { useForm } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
-import { LoginSchema, loginSchema } from "@/schema/loginSchema"
+import { SignupSchema, signupSchema } from "@/schema/signupSchema"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Button } from "@/components/ui/button"
@@ -13,55 +13,44 @@ import {
   CardTitle,
 } from "@/components/ui/card"
 import Link from "next/link"
-import { useState } from "react"
-import Cookies from "js-cookie"
 
-export default function AuthForm() {
+export default function SignupForm() {
   const {
     register,
     handleSubmit,
     formState: { errors, isSubmitting },
-  } = useForm<LoginSchema>({
-    resolver: zodResolver(loginSchema),
+  } = useForm<SignupSchema>({
+    resolver: zodResolver(signupSchema),
   })
 
-  const [authError, setAuthError] = useState<string>("")
-
-  const onSubmit = async (data: LoginSchema) => {
-    setAuthError("") // Clear previous errors
-    
-    // Basic authentication check
-    if (data.email === "admin@test.com" && data.password === "admin") {
-      Cookies.set("user", JSON.stringify(data), {
-        expires: 7,
-        secure: true,
-        sameSite: "strict",
-      })
-      // Add redirect
-      window.location.href = "/dashboard"
-    } else {
-      setAuthError("Invalid email or password")
-    }
+  const onSubmit = (data: SignupSchema) => {
+    console.log("Signup data:", data)
+    // TODO: Add API call/registration logic
   }
 
   return (
     <div className="min-h-screen flex items-center justify-center px-4 bg-background text-foreground">
       <Card className="w-full max-w-md shadow-xl rounded-xl bg-card text-card-foreground">
         <CardHeader>
-          <CardTitle className="text-2xl text-center">Sign In</CardTitle>
+          <CardTitle className="text-2xl text-center">Create Account</CardTitle>
         </CardHeader>
         <CardContent>
           <form onSubmit={handleSubmit(onSubmit)} className="space-y-6" noValidate>
-            {/* Auth Error Message */}
-            {authError && (
-              <p className="text-destructive text-sm text-center mb-4">
-                {authError}
-              </p>
-            )}
-
-            {/* Existing form fields */}
             <div>
-              <Label htmlFor="email" className="mb-2">Email</Label>
+              <Label htmlFor="name">Name</Label>
+              <Input
+                id="name"
+                type="text"
+                placeholder="John Doe"
+                {...register("name")}
+              />
+              {errors.name && (
+                <p className="text-destructive text-sm mt-1">{errors.name.message}</p>
+              )}
+            </div>
+
+            <div>
+              <Label htmlFor="email">Email</Label>
               <Input
                 id="email"
                 type="email"
@@ -72,8 +61,9 @@ export default function AuthForm() {
                 <p className="text-destructive text-sm mt-1">{errors.email.message}</p>
               )}
             </div>
+
             <div>
-              <Label htmlFor="password" className="mb-2">Password</Label>
+              <Label htmlFor="password">Password</Label>
               <Input
                 id="password"
                 type="password"
@@ -84,19 +74,32 @@ export default function AuthForm() {
                 <p className="text-destructive text-sm mt-1">{errors.password.message}</p>
               )}
             </div>
-            
+
+            <div>
+              <Label htmlFor="confirmPassword">Confirm Password</Label>
+              <Input
+                id="confirmPassword"
+                type="password"
+                placeholder="••••••••"
+                {...register("confirmPassword")}
+              />
+              {errors.confirmPassword && (
+                <p className="text-destructive text-sm mt-1">{errors.confirmPassword.message}</p>
+              )}
+            </div>
+
             <Button type="submit" className="w-full" disabled={isSubmitting}>
-              {isSubmitting ? "Signing in..." : "Sign In"}
+              {isSubmitting ? "Creating account..." : "Sign Up"}
             </Button>
           </form>
 
           <div className="mt-4 text-center text-sm">
-            Don&apos;t have an account?{" "}
+            Already have an account?{" "}
             <Link
-              href="/signup"
+              href="/"
               className="underline-offset-4 hover:underline text-primary"
             >
-              Sign Up
+              Sign In
             </Link>
           </div>
         </CardContent>
