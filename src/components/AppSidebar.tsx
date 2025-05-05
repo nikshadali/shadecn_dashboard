@@ -50,12 +50,12 @@ const items = [
   },
   {
     title: "Inbox",
-    url: "/users",
+    url: "/dashboard/users",
     icon: Inbox,
   },
   {
-    title: "Calendar",
-    url: "#",
+    title: "payments",
+    url: "/dashboard/payments",
     icon: Calendar,
   },
   {
